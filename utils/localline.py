@@ -1,5 +1,7 @@
 import pandas as pd
 
+NAME_KEY = 'Customer Name'
+
 EVIDENCE_OF_BOX_DELIVERY_NEEDED = {
     'regexes': [
         r'\$\d+\sbox',
@@ -80,3 +82,28 @@ def delivery_products(a_customer):
     key_index = LOCALLINE_HEADER.index('Product')
     
     return _delivery_products(a_customer, key_index=key_index)
+
+def delivery_report(file_path):
+    def _their_name(a_customer):
+        first_possible = a_customer.iloc[0,0]
+        second_possible = a_customer.iloc[1,0]
+
+        if pd.isnull(first_possible) and second_possible:
+            return second_possible
+        elif not pd.isnull(first_possible) and first_possible:
+            return first_possible
+        else:
+            raise ValueError
+
+    def _delivery_report(their_name, products):
+        products[NAME_KEY] = their_name
+        return df
+
+    df = load_csv(file_path)
+    customers = extract_customers(df=df)
+
+    for a_customer in customers:
+        their_name = _their_name(a_customer)
+        products = delivery_products(a_customer)
+        if not products.empty:
+            yield _delivery_report(their_name, products)
