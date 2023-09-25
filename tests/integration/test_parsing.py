@@ -10,7 +10,7 @@ def small_sample():
         localline.load_csv(SMALL_SAMPLE)
     )
 
-#@pytest.mark.skip()
+
 def test_customer_delivery_report(small_sample):
     the_reports = list(localline.delivery_report(SMALL_SAMPLE))
 

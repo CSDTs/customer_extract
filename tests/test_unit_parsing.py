@@ -10,13 +10,13 @@ def small_sample():
         localline.load_csv(SMALL_SAMPLE)
     )
 
-@pytest.mark.skip()
+
 def test_number_of_customers(small_sample):
     customers = localline.extract_customers(small_sample)
     expected = 3
     assert expected == len(customers),f"Unexpected number of customers, {len(customers)} vs. {expected}"
 
-@pytest.mark.skip()
+
 def test_expect_one_delivery(small_sample):
     customers = localline.extract_customers(small_sample)
     products = localline.delivery_products(
