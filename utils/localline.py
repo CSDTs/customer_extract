@@ -96,14 +96,22 @@ def delivery_report(file_path):
             raise ValueError
 
     def _delivery_report(their_name, products):
-        products[NAME_KEY] = their_name
-        return df
+        products.loc[:, NAME_KEY] = their_name
+        return products
 
+    RENAME_COLUMNS = dict(
+        zip(
+            range(len(LOCALLINE_HEADER)),
+            LOCALLINE_HEADER)
+    )
     df = load_csv(file_path)
     customers = extract_customers(df=df)
 
     for a_customer in customers:
         their_name = _their_name(a_customer)
         products = delivery_products(a_customer)
+
         if not products.empty:
+            products = products.copy()
+            products.rename(columns=RENAME_COLUMNS, inplace=True)
             yield _delivery_report(their_name, products)
